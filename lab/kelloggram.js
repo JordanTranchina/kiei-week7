@@ -27,7 +27,7 @@ firebase.auth().onAuthStateChanged(async function (user) {
     // Listen for the form submit and create/render the new post
     document.querySelector('form').addEventListener('submit', async function (event) {
       event.preventDefault()
-      let postUsername = document.querySelector('#username').value
+      let postUsername = user.displayName
       let postImageUrl = document.querySelector('#image-url').value
       let postNumberOfLikes = 0
       let docRef = await db.collection('posts').add({
@@ -109,7 +109,7 @@ async function renderPost(postId, postUsername, postImageUrl, postNumberOfLikes)
 
 // Method: Refactor the existing domain model (see ../images/domain-model-kelloggram.png)
 
-// Step 1: In the Firebase Console, delete the existing posts collection if one exists
+// Step 1: In the Firebase Console, delete the existing posts collection if one exists ✅
 // Step 2: Remove the username from the form, replace with the current user's name
 // Step 3: "Liking" should add a new "likes" document in Firestore with the post ID 
 //         and current user ID
