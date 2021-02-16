@@ -2,12 +2,12 @@
 // firebase.auth().onAuthStateChanged and move code that 
 // shows login UI to only show when signed out
 
-firebase.auth().onAuthStateChanged(async function(user) {
-  
+firebase.auth().onAuthStateChanged(async function (user) {
+
   if (user) {
     let db = firebase.firestore()
 
-    document.querySelector('form').addEventListener('submit', async function(event) {
+    document.querySelector('form').addEventListener('submit', async function (event) {
       event.preventDefault()
 
       let todoText = document.querySelector('#todo').value
@@ -27,7 +27,7 @@ firebase.auth().onAuthStateChanged(async function(user) {
           </div>
         `)
 
-        document.querySelector(`.todo-${todoId} .done`).addEventListener('click', async function(event) {
+        document.querySelector(`.todo-${todoId} .done`).addEventListener('click', async function (event) {
           event.preventDefault()
           document.querySelector(`.todo-${todoId}`).classList.add('opacity-20')
           await db.collection('todos').doc(todoId).delete()
@@ -40,7 +40,7 @@ firebase.auth().onAuthStateChanged(async function(user) {
     console.log(`Number to todos in collection: ${querySnapshot.size}`)
 
     let todos = querySnapshot.docs
-    for (let i=0; i<todos.length; i++) {
+    for (let i = 0; i < todos.length; i++) {
       let todoId = todos[i].id
       let todo = todos[i].data()
       let todoText = todo.text
@@ -52,7 +52,7 @@ firebase.auth().onAuthStateChanged(async function(user) {
         </div>
       `)
 
-      document.querySelector(`.todo-${todoId} .done`).addEventListener('click', async function(event) {
+      document.querySelector(`.todo-${todoId} .done`).addEventListener('click', async function (event) {
         event.preventDefault()
         document.querySelector(`.todo-${todoId}`).classList.add('opacity-20')
         await db.collection('todos').doc(todoId).delete()
