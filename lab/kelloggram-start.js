@@ -3,7 +3,7 @@ let db = firebase.firestore()
 // Change main event listener from DOMContentLoaded to 
 // firebase.auth().onAuthStateChanged and move code that 
 // shows login UI to only show when signed out
-firebase.auth().onAuthStateChanged(async function(user) {
+firebase.auth().onAuthStateChanged(async function (user) {
   if (user) {
     // Signed in
     console.log('signed in')
@@ -18,21 +18,21 @@ firebase.auth().onAuthStateChanged(async function(user) {
     document.querySelector('.sign-in-or-sign-out').innerHTML = `
       <button class="text-pink-500 underline sign-out">Sign Out</button>
     `
-    document.querySelector('.sign-out').addEventListener('click', function(event) {
+    document.querySelector('.sign-out').addEventListener('click', function (event) {
       console.log('sign out clicked')
       firebase.auth().signOut()
       document.location.href = 'kelloggram.html'
     })
 
     // Listen for the form submit and create/render the new post
-    document.querySelector('form').addEventListener('submit', async function(event) {
+    document.querySelector('form').addEventListener('submit', async function (event) {
       event.preventDefault()
       let postUsername = document.querySelector('#username').value
       let postImageUrl = document.querySelector('#image-url').value
       let postNumberOfLikes = 0
-      let docRef = await db.collection('posts').add({ 
-        username: postUsername, 
-        imageUrl: postImageUrl, 
+      let docRef = await db.collection('posts').add({
+        username: postUsername,
+        imageUrl: postImageUrl,
         likes: 0,
         created: firebase.firestore.FieldValue.serverTimestamp()
       })
@@ -43,7 +43,7 @@ firebase.auth().onAuthStateChanged(async function(user) {
     // Render all posts when the page is loaded
     let querySnapshot = await db.collection('posts').orderBy('created').get()
     let posts = querySnapshot.docs
-    for (let i=0; i<posts.length; i++) {
+    for (let i = 0; i < posts.length; i++) {
       let postId = posts[i].id
       let postData = posts[i].data()
       let postUsername = postData.username
@@ -92,7 +92,7 @@ async function renderPost(postId, postUsername, postImageUrl, postNumberOfLikes)
       </div>
     </div>
   `)
-  document.querySelector(`.post-${postId} .like-button`).addEventListener('click', async function(event) {
+  document.querySelector(`.post-${postId} .like-button`).addEventListener('click', async function (event) {
     event.preventDefault()
     console.log(`post ${postId} like button clicked!`)
     let existingNumberOfLikes = document.querySelector(`.post-${postId} .likes`).innerHTML
