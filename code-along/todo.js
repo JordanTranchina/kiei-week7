@@ -20,7 +20,8 @@ firebase.auth().onAuthStateChanged(async function (user) {
 
       if (todoText.length > 0) {
         let docRef = await db.collection('todos').add({
-          text: todoText
+          text: todoText,
+          userId: user.uid
         })
 
         let todoId = docRef.id
@@ -42,7 +43,9 @@ firebase.auth().onAuthStateChanged(async function (user) {
       }
     })
 
-    let querySnapshot = await db.collection('todos').get()
+    let querySnapshot = await db.collection('todos')
+      .where("userId", "==", user.uid)
+      .get()
     console.log(`Number to todos in collection: ${querySnapshot.size}`)
 
     let todos = querySnapshot.docs
@@ -99,5 +102,3 @@ firebase.auth().onAuthStateChanged(async function (user) {
     ui.start('.sign-in-or-sign-out', authUIConfig)
   }
 })
-
-// Step 5: Add user ID to newly created to-do and only show my to-dos
