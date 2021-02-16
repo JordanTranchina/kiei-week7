@@ -27,7 +27,7 @@ firebase.auth().onAuthStateChanged(async function (user) {
     // Listen for the form submit and create/render the new post
     document.querySelector('form').addEventListener('submit', async function (event) {
       event.preventDefault()
-      let postUsername = user.displayName
+      let postUsername = user.displayName // the current user's name
       let postImageUrl = document.querySelector('#image-url').value
       let postNumberOfLikes = 0
       let docRef = await db.collection('posts').add({
@@ -103,20 +103,16 @@ async function renderPost(postId, postUsername, postImageUrl, postNumberOfLikes)
       .where('userId', '==', userId)
       .get()
 
-
     if (querySnapshot.size == 0) {
+      // only if there's not already a like with userId/postId combo
       let existingNumberOfLikes = document.querySelector(`.post-${postId} .likes`).innerHTML
       let newNumberOfLikes = parseInt(existingNumberOfLikes) + 1
       document.querySelector(`.post-${postId} .likes`).innerHTML = newNumberOfLikes
 
-
       // new likes document
-      await db.collection("likes").add({
+      await db.collection('likes').add({
         postId: postId,
         userId: firebase.auth().currentUser.uid
-      })
-      await db.collection('posts').doc(postId).update({
-        likes: firebase.firestore.FieldValue.increment(1)
       })
 
     }
@@ -128,17 +124,17 @@ async function renderPost(postId, postUsername, postImageUrl, postNumberOfLikes)
 
 // Method: Refactor the existing domain model (see ../images/domain-model-kelloggram.png)
 
-// Step 1: In the Firebase Console, delete the existing posts collection if one exists ✅
-// Step 2: Remove the username from the form, replace with the current user's name ✅
+// Step 1: In the Firebase Console, delete the existing posts collection if one exists
+// Step 2: Remove the username from the form, replace with the current user's name
 // Step 3: "Liking" should add a new "likes" document in Firestore with the post ID 
-//         and current user ID ✅
-// Step 4: "Liking" should only be allowed once per user per post – check for an 
+//         and current user ID
+// Step 4: "Liking" should only be allowed once per user per post – check for an 
 //         existing "like" before adding a new "likes" document, i.e. get() the likes 
 //         collection and filter by postId and userId, and ask for the .size Tip: 
-//         you can combine .where() methods, for example: ✅
-// db.collection('likes').where('postId', '==', postId).where('userId', '==', userId).get()
-// Step 5: The code to increment the number of likes in the UI when the like button
-//         is clicked should be inside the conditional logic written in Step 4 ✅
+//         you can combine .where() methods, for example:
+//         db.collection('likes').where('postId', '==', postId).where('userId', '==', userId).get()
+// Step 5: The code to increment the number of likes in the UI when the like button 
+//         is clicked should be inside the conditional logic written in Step 4
 // Step 6: Get the actual number of likes from Firestore for each post when the
 //         page is loaded, using a .get() with .where() conditions and asking for
 //         the .size
