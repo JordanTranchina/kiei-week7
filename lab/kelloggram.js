@@ -95,7 +95,8 @@ async function renderPost(postId, postUsername, postImageUrl, postNumberOfLikes)
       // step 3:
       await db.collection('likes').add({
         postId: postId,
-        userId: currentUser.uid
+        userId: currentUser.uid,
+        userName: currentUser.displayName
       })
       let existingNumberOfLikes = document.querySelector(`.post-${postId} .likes`).innerHTML
       let newNumberOfLikes = parseInt(existingNumberOfLikes) + 1
